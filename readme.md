@@ -6,9 +6,10 @@ Simple REST application providing access to data about cars, and system for rati
 ## How to run?
 
 ### Starting
-1. Type command `python manage.py runsystem` in terminal in project root directory.
-2. Open browser with url `http://0.0.0.0:8000` or `http://127.0.0.1:8000` on Windows.
-3. Enjoy!
+1. Rename **.env-default** file to **.env**.
+2. Type command `docker-compose up --build` in terminal in project root directory.
+3. Open browser with url `http://0.0.0.0:8000` or `http://127.0.0.1:8000` on Windows.
+4. Enjoy!
 
 
 ## Licence
