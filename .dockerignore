@@ -1,0 +1,6 @@
+__pycache__
+*.pyc
+**/tests
+db.sqlite3
+.github
+.env-default
