@@ -11,6 +11,38 @@ Simple REST application providing access to data about cars, and system for rati
 3. Open browser with url `http://0.0.0.0:8000` or `http://127.0.0.1:8000` on Windows.
 4. Enjoy!
 
+## Tests (coverage)
+<dl>
+<table class="index">
+        <thead>
+            <tr class="tablehead" title="Click to sort">
+                <th class="name left headerSortDown shortkey_n">Module</th>
+                <th class="shortkey_s">statements</th>
+                <th class="shortkey_m">missing</th>
+                <th class="shortkey_x">excluded</th>
+                <th class="right shortkey_c">coverage</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr class="total">
+                <td class="name left">Total</td>
+                <td>16</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="16 16">100%</td>
+            </tr>
+        </tfoot>
+        <tbody>
+            <tr class="file">
+                <td class="name left"><a href="cars_models_py.html">cars/models.py</a></td>
+                <td>16</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="16 16">100%</td>
+            </tr>
+        </tbody>
+    </table>
+</dl>
 
 ## Licence
 ```text
