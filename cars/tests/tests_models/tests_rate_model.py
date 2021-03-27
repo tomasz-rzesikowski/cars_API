@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.db import DataError, IntegrityError
+from django.db import IntegrityError
 from django.test import TestCase
 
 from cars.models import Manufacturer, Car, Rate
