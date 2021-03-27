@@ -36,7 +36,7 @@ class CarTestWithoutDBConnection(TestCase):
         self.assertEqual(car.model, "Mustang")
 
     def test_car_str(self):
-        manufacturer=Manufacturer(id=1, name="Ford")
+        manufacturer = Manufacturer(id=1, name="Ford")
         car = Car(manufacturer=manufacturer, model="Mustang")
         self.assertEqual(car.__str__(), "Ford Mustang")
 
@@ -44,12 +44,12 @@ class CarTestWithoutDBConnection(TestCase):
 class CarTestWithDBConnection(TestCase):
     def setUp(self):
         self.manufacturer = Manufacturer.objects.create(name="Ford")
-        self.car = Car.objects.create(model="Mustang", manufacturer=self.manufacturer)
+        self.car = Car.objects.create(manufacturer=self.manufacturer, model="Mustang")
 
     def test_car_create_with_proper_fields(self):
         self.assertNotEqual(self.car.id, None)
-        self.assertEqual(self.car.model, "Mustang")
         self.assertEqual(self.car.manufacturer_id, self.manufacturer.id)
+        self.assertEqual(self.car.model, "Mustang")
 
     def test_car_empty_manufacturer_id_field(self):
         with self.assertRaises(IntegrityError):
