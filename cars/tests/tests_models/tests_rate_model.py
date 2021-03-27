@@ -5,7 +5,7 @@ from django.test import TestCase
 from cars.models import Manufacturer, Car, Rate
 
 
-class RatingTestWithoutDBConnection(TestCase):
+class RateTestWithoutDBConnection(TestCase):
 
     def setUp(self):
         self.car = Car(id=1, model="Mustang")
