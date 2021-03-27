@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.db import DataError, IntegrityError
 from django.test import TestCase
 
@@ -20,11 +19,14 @@ class ManufacturerTestWithoutDBConnection(TestCase):
         )
 
     def test_manufacturer_id_field(self):
-        self.assertEqual(f"{self.manufacturer.id}", "None")
+        self.assertEqual(self.manufacturer.id, None)
+
+    def test_manufacturer_empty_name_field(self):
+        self.assertEqual(self.manufacturer.name, None)
 
     def test_manufacturer_name_field(self):
         manufacturer = Manufacturer(name="Ford")
-        self.assertEqual(f"{manufacturer.name}", "Ford")
+        self.assertEqual(manufacturer.name, "Ford")
 
     def test_manufacturer_str(self):
         self.assertEqual(self.manufacturer.__str__(), self.manufacturer.name)
@@ -32,7 +34,7 @@ class ManufacturerTestWithoutDBConnection(TestCase):
 
 class ManufacturerTestWithDBConnection(TestCase):
 
-    def test_manufacturer_proper_name_field(self):
+    def test_manufacturer_create_with_proper_fields(self):
         manufacturer = Manufacturer.objects.create(name="Ford")
         self.assertNotEqual(manufacturer.id, None)
         self.assertEqual(manufacturer.name, "Ford")
