@@ -36,14 +36,14 @@ class CarTestWithoutDBConnection(TestCase):
         self.assertEqual(car.model, "Mustang")
 
     def test_car_str(self):
-        manufacturer = Manufacturer(id=1, name="Ford")
+        manufacturer = Manufacturer(id=1, make="Ford")
         car = Car(manufacturer=manufacturer, model="Mustang")
         self.assertEqual(car.__str__(), "Ford Mustang")
 
 
 class CarTestWithDBConnection(TestCase):
     def setUp(self):
-        self.manufacturer = Manufacturer.objects.create(name="Ford")
+        self.manufacturer = Manufacturer.objects.create(make="Ford")
         self.car = Car.objects.create(manufacturer=self.manufacturer, model="Mustang")
 
     def test_car_create_with_proper_fields(self):

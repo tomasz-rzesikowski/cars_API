@@ -44,7 +44,7 @@ class RateTestWithoutDBConnection(TestCase):
 
 class RatingTestWithDBConnection(TestCase):
     def setUp(self):
-        self.manufacturer = Manufacturer.objects.create(name="Ford")
+        self.manufacturer = Manufacturer.objects.create(make="Ford")
         self.car = Car.objects.create(manufacturer=self.manufacturer, model="Mustang")
         self.rate = Rate.objects.create(car=self.car, rating=3)
 

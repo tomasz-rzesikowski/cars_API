@@ -8,7 +8,7 @@ class ManufacturerSerializersTest(TestCase):
 
     def setUp(self):
         self.manufacturer_attributes = {
-            "name": "Ford"
+            "make": "Ford"
         }
         self.serializer_data = {
             "make": "Ford"
@@ -23,7 +23,7 @@ class ManufacturerSerializersTest(TestCase):
 
     def test_contain_expected_values(self):
         data = self.serializer.data
-        self.assertEqual(data["make"], self.manufacturer.name)
+        self.assertEqual(data["make"], self.manufacturer.make)
 
     def test_too_long_manufacturer_name_data(self):
         self.serializer_data["make"] = "t"*151

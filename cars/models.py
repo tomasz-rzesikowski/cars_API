@@ -3,10 +3,10 @@ from django.db import models
 
 
 class Manufacturer(models.Model):
-    name = models.CharField(max_length=150, null=False, default=None)
+    make = models.CharField(max_length=150, null=False, default=None)
 
     def __str__(self):
-        return self.name
+        return self.make
 
 
 class Car(models.Model):
@@ -14,7 +14,7 @@ class Car(models.Model):
     model = models.CharField(max_length=150, null=False, default=None)
 
     def __str__(self):
-        return f"{self.manufacturer.name} {self.model}"
+        return f"{self.manufacturer.make} {self.model}"
 
 
 class Rate(models.Model):
