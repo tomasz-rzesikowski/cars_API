@@ -1,12 +1,14 @@
+from django.core.exceptions import ValidationError
 from django.db import DataError, IntegrityError
 from django.test import TestCase
 
-from cars.models import Manufacturer, Car
+from cars.models import Manufacturer, Car, Rate
 
 
 class RatingTestWithoutDBConnection(TestCase):
 
     def setUp(self):
+        self.car = Car(id=1, model="Mustang")
         self.rate = Rate()
 
     def test_rate_instance(self):
@@ -31,13 +33,12 @@ class RatingTestWithoutDBConnection(TestCase):
         rate = Rate(car_id=1)
         self.assertEqual(rate.car_id, 1)
 
-    def test_rate_model_field(self):
+    def test_rate_rating_field(self):
         rate = Rate(rating=5)
         self.assertEqual(rate.rating, 5)
 
     def test_rate_str(self):
-        car = Car(id=1, model="Mustang")
-        rate = Rate(car=car, rating=4)
+        rate = Rate(car=self.car, rating=4)
         self.assertEqual(rate.__str__(), "Mustang rating: 4")
 
 
@@ -54,19 +55,33 @@ class RatingTestWithDBConnection(TestCase):
 
     def test_rate_empty_car_id_field(self):
         with self.assertRaises(IntegrityError):
-            Rate.objects.create(rate=3)
+            Rate.objects.create(rating=3)
 
     def test_rate_empty_rating_field(self):
         with self.assertRaises(IntegrityError):
             Rate.objects.create(car=self.car)
 
     def test_rate_too_small_value_rating_field(self):
-        with self.assertRaises(DataError):
-            Rate.objects.create(car=self.car, rating=0)
+        rate = Rate.objects.create(car=self.car, rating=0)
+        with self.assertRaisesMessage(ValidationError,
+                                      expected_message="Ensure this value is greater than or equal to 1."):
+            rate.clean_fields()
+
+    def test_rate_min_value_rating_field(self):
+        rate = Rate.objects.create(car=self.car, rating=1)
+        rate.clean_fields()
+        self.assertEqual(rate.rating, 1)
+
+    def test_rate_max_value_rating_field(self):
+        rate = Rate.objects.create(car=self.car, rating=5)
+        rate.clean_fields()
+        self.assertEqual(rate.rating, 5)
 
     def test_rate_too_big_value_rating_field(self):
-        with self.assertRaises(DataError):
-            Rate.objects.create(car=self.car, rating=6)
+        rate = Rate.objects.create(car=self.car, rating=6)
+        with self.assertRaisesMessage(ValidationError,
+                                      expected_message="Ensure this value is less than or equal to 5."):
+            rate.clean_fields()
 
     def test_rate_manufacturer_cascade_on_del(self):
         self.car.delete()
