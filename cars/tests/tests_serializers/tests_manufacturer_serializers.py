@@ -1,6 +1,7 @@
 from django.test import TestCase
 
 from cars.models import Manufacturer
+from cars.serializers import ManufacturerSerializer
 
 
 class ManufacturerSerializersTest(TestCase):
@@ -13,7 +14,7 @@ class ManufacturerSerializersTest(TestCase):
             "make": "Ford"
         }
 
-        self.manufacturer = Manufacturer.objects.create(self.manufacturer_attributes)
+        self.manufacturer = Manufacturer.objects.create(**self.manufacturer_attributes)
         self.serializer = ManufacturerSerializer(self.manufacturer)
 
     def test_contain_expected_fields(self):
@@ -25,8 +26,8 @@ class ManufacturerSerializersTest(TestCase):
         self.assertEqual(data["make"], self.manufacturer.name)
 
     def test_too_long_manufacturer_name_data(self):
-        serializer_data = {
-            "make": "t" * 151
-        }
-        serializer = ManufacturerSerializer(serializer_data)
+        self.serializer_data["make"] = "t"*151
+        serializer = ManufacturerSerializer(data=self.serializer_data)
+
         self.assertEqual(serializer.is_valid(), False)
+        self.assertCountEqual(serializer.errors.keys(), ["make"])
