@@ -1,6 +1,8 @@
 from django.core.exceptions import ValidationError
+from django.db import DataError, IntegrityError
 from django.test import TestCase
 
+from cars.models import Manufacturer
 
 
 class ManufacturerTestWithoutDBConnection(TestCase):
@@ -18,10 +20,11 @@ class ManufacturerTestWithoutDBConnection(TestCase):
         )
 
     def test_manufacturer_id_field(self):
-        self.assertEqual(f"{self.manufacturer.id}", None)
+        self.assertEqual(f"{self.manufacturer.id}", "None")
 
     def test_manufacturer_name_field(self):
-        self.assertEqual(f"{self.manufacturer.name}", "Ford")
+        manufacturer = Manufacturer(name="Ford")
+        self.assertEqual(f"{manufacturer.name}", "Ford")
 
     def test_manufacturer_str(self):
         self.assertEqual(self.manufacturer.__str__(), self.manufacturer.name)
@@ -35,9 +38,9 @@ class ManufacturerTestWithDBConnection(TestCase):
         self.assertEqual(manufacturer.name, "Ford")
 
     def test_manufacturer_empty_name_field(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(IntegrityError):
             Manufacturer.objects.create()
 
     def test_manufacturer_too_long_name_field(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(DataError):
             Manufacturer.objects.create(name="t" * 151)
