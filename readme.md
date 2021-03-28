@@ -26,10 +26,10 @@ Simple REST application providing access to data about cars, and system for rati
         <tfoot>
             <tr class="total">
                 <td class="name left">Total</td>
-                <td>16</td>
+                <td>57</td>
                 <td>0</td>
                 <td>0</td>
-                <td class="right" data-ratio="16 16">100%</td>
+                <td class="right" data-ratio="57 57">100%</td>
             </tr>
         </tfoot>
         <tbody>
@@ -39,6 +39,13 @@ Simple REST application providing access to data about cars, and system for rati
                 <td>0</td>
                 <td>0</td>
                 <td class="right" data-ratio="16 16">100%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="cars_serializers_py.html">cars/serializers.py</a></td>
+                <td>41</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="41 41">100%</td>
             </tr>
         </tbody>
     </table>

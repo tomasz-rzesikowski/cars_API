@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name='Manufacturer',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(default=None, max_length=150)),
+                ('make', models.CharField(default=None, max_length=150)),
             ],
         ),
     ]
