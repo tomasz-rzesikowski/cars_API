@@ -1,9 +1,10 @@
 from django.test import TestCase
 
 from cars.models import Manufacturer, Car, Rate
+from cars.serializers import RateSerializer
 
 
-class ManufacturerSerializersTest(TestCase):
+class RateSerializersTest(TestCase):
 
     def setUp(self):
         self.serializer_data = {
@@ -13,7 +14,7 @@ class ManufacturerSerializersTest(TestCase):
 
         self.manufacturer = Manufacturer.objects.create(make="Ford")
         self.car = Car.objects.create(manufacturer=self.manufacturer, model="Mustang")
-        self.rate = Rate.objects.create(car_id=self.car, rating=1)
+        self.rate = Rate.objects.create(car=self.car, rating=1)
         self.serializer = RateSerializer(self.rate)
 
     def test_contain_expected_fields(self):

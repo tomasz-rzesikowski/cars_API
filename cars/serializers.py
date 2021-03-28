@@ -2,7 +2,7 @@ import requests
 from rest_framework import serializers
 from rest_framework.exceptions import NotFound
 
-from cars.models import Manufacturer, Car
+from cars.models import Manufacturer, Car, Rate
 
 
 class CarPostSerializer(serializers.ModelSerializer):
@@ -27,3 +27,9 @@ class CarPostSerializer(serializers.ModelSerializer):
                 return instance
 
         raise NotFound(detail="Car not found in external API")
+
+
+class RateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rate
+        fields = ("car_id", "rating")
