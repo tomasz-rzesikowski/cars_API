@@ -1,6 +1,7 @@
 from django.test import TestCase
 
 from cars.models import Manufacturer, Car, Rate
+from cars.serializers import CarGetSerializer
 
 
 class CarGetSerializersTest(TestCase):
