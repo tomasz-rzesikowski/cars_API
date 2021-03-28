@@ -1,9 +1,11 @@
+from django.urls import resolve
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIRequestFactory
 
 from cars.models import Car, Manufacturer, Rate
-from cars.serializers import CarGetSerializer, PopularSerializer
+from cars.serializers import PopularSerializer
+from cars.views import PopularListView
 
 factory = APIRequestFactory()
 
@@ -15,6 +17,9 @@ class CarListViewTest(APITestCase):
 
     def test_url_revers(self):
         url = reverse("cars:list_popular")
+        found = resolve(url)
+
+        self.assertEqual(found.func.__name__, self.view.__name__)
         self.assertEqual(url, "/popular/")
 
     def test_empty_popular_list(self):
@@ -24,6 +29,7 @@ class CarListViewTest(APITestCase):
         response = self.view(self.request)
         response.render()
 
+        self.assertCountEqual(response.data, [])
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -44,5 +50,6 @@ class CarListViewTest(APITestCase):
         response = self.view(self.request)
         response.render()
 
+        self.assertCountEqual(response.data[0].keys(), ["id", "make", "model", "rates_number"])
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
