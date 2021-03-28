@@ -4,19 +4,26 @@ from rest_framework.test import APITestCase, APIRequestFactory
 
 from cars.models import Car, Manufacturer
 from cars.serializers import CarGetSerializer
+from cars.views import CarListView
 
 factory = APIRequestFactory()
 
 
 class CarListViewTest(APITestCase):
+    def setUp(self) -> None:
+        self.view = CarListView.as_view()
+        self.request = factory.get(reverse("cars:list_cars"))
+
     def test_url_revers(self):
-        url = reverse("cars:cars_list")
+        url = reverse("cars:list_cars")
         self.assertEqual(url, "/cars/")
 
     def test_empty_car_list(self):
-        response = factory.get(reverse("cars:cars_list"))
         cars = Car.objects.all()
         serializer = CarGetSerializer(cars, many=True)
+
+        response = self.view(self.request)
+        response.render()
 
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -27,9 +34,11 @@ class CarListViewTest(APITestCase):
         Car.objects.create(manufacturer=manufacturer, model="Mustang")
         Car.objects.create(manufacturer=manufacturer, model="F-150")
 
-        response = factory.get(reverse("cars:cars_list"))
         cars = Car.objects.all()
         serializer = CarGetSerializer(cars, many=True)
+
+        response = self.view(self.request)
+        response.render()
 
         self.assertEqual(response.data, serializer.data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
