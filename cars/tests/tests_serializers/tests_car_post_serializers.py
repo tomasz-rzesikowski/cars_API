@@ -4,7 +4,7 @@ from django.test import TestCase
 from rest_framework.exceptions import NotFound
 
 from cars.models import Manufacturer, Car
-from cars.serializers import CarSerializer
+from cars.serializers import CarPostSerializer
 
 
 class ManufacturerSerializersTest(TestCase):
@@ -27,7 +27,7 @@ class ManufacturerSerializersTest(TestCase):
 
         self.manufacturer = Manufacturer.objects.create(make="Ford")
         self.car = Car.objects.create(manufacturer=self.manufacturer, model="Mustang")
-        self.serializer = CarSerializer(self.car)
+        self.serializer = CarPostSerializer(self.car)
 
     def test_contain_expected_fields(self):
         data = self.serializer.data
@@ -40,20 +40,20 @@ class ManufacturerSerializersTest(TestCase):
 
     def test_too_long_make_data(self):
         self.serializer_data["make"] = "t" * 151
-        serializer = CarSerializer(data=self.serializer_data)
+        serializer = CarPostSerializer(data=self.serializer_data)
 
         self.assertEqual(serializer.is_valid(), False)
         self.assertCountEqual(serializer.errors.keys(), ["make"])
 
     def test_too_long_model_data(self):
         self.serializer_data["model"] = "t" * 151
-        serializer = CarSerializer(data=self.serializer_data)
+        serializer = CarPostSerializer(data=self.serializer_data)
 
         self.assertEqual(serializer.is_valid(), False)
         self.assertCountEqual(serializer.errors.keys(), ["model"])
 
     def test_save_proper_request(self):
-        serializer = CarSerializer(data=self.serializer_data)
+        serializer = CarPostSerializer(data=self.serializer_data)
 
         serializer.is_valid()
         with patch("cars.serializers.requests.get") as mock_get:
@@ -64,7 +64,7 @@ class ManufacturerSerializersTest(TestCase):
     def test_save_not_existed_car_request(self):
         self.serializer_data["model"] = "unknown"
         with self.assertRaises(NotFound):
-            serializer = CarSerializer(data=self.serializer_data)
+            serializer = CarPostSerializer(data=self.serializer_data)
             serializer.is_valid()
 
             with patch("cars.serializers.requests.get") as mock_get:

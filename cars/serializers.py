@@ -5,7 +5,7 @@ from rest_framework.exceptions import NotFound
 from cars.models import Manufacturer, Car
 
 
-class CarSerializer(serializers.ModelSerializer):
+class CarPostSerializer(serializers.ModelSerializer):
     make = serializers.CharField(source="manufacturer", max_length=150)
 
     class Meta:
