@@ -2,6 +2,12 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 
+class CarManager(models.Manager):
+    def create(self, *args, **kwargs):
+        print("manager")
+        return Car.objects.create(Manufacturer(make="Ford"), model="Mustang")
+    
+
 class Manufacturer(models.Model):
     make = models.CharField(max_length=150, null=False, default=None)
 

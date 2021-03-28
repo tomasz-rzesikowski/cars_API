@@ -3,11 +3,13 @@ from unittest.mock import patch
 from django.db import DataError
 from django.urls import resolve
 from rest_framework import status
+from rest_framework.exceptions import ErrorDetail
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIRequestFactory
 
 from cars.models import Car, Manufacturer
 from cars.serializers import CarGetSerializer
+from cars.views import CarListCreateView
 
 factory = APIRequestFactory()
 
@@ -39,17 +41,17 @@ class CarCreateViewTest(APITestCase):
         response = self.view(request)
         response.render()
 
-        self.assertEqual(response.data, {})
+        self.assertEqual(response.data, {'make': [ErrorDetail(string='This field is required.', code='required')]})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_model_and_manufacturer_not_in_db_car_post(self):
         """ Manufacturer and model doesn't exist in db."""
         request = factory.post(self.url, {"make": "Ford", "model": "Mustang"}, format="json")
 
-        with self.assertRaises(DataError):
+        with self.assertRaises(Manufacturer.DoesNotExist):
             Manufacturer.objects.get(make="Ford")
 
-        with self.assertRaises(DataError):
+        with self.assertRaises(Car.DoesNotExist):
             Car.objects.get(model="Mustang")
 
         with patch("cars.serializers.requests.get") as mock_get:
@@ -58,6 +60,7 @@ class CarCreateViewTest(APITestCase):
 
             response = self.view(request)
             response.render()
+            print("!1")
 
         car = Car.objects.get(model="Mustang")
         serializer = CarGetSerializer(car)
@@ -74,7 +77,7 @@ class CarCreateViewTest(APITestCase):
 
         Manufacturer.objects.create(make="Ford")
 
-        with self.assertRaises(DataError):
+        with self.assertRaises(Car.DoesNotExist):
             Car.objects.get(model="Mustang")
 
         with patch("cars.serializers.requests.get") as mock_get:
@@ -83,6 +86,7 @@ class CarCreateViewTest(APITestCase):
 
             response = self.view(request)
             response.render()
+            print("!2")
 
         car = Car.objects.get(model="Mustang")
         serializer = CarGetSerializer(car)
@@ -121,6 +125,7 @@ class CarCreateViewTest(APITestCase):
     def test_model_and_manufacturer_not_in_external_API_car_post(self):
         """ Manufacturer and model doesn't exist in external API."""
         request = factory.post(self.url, {"make": "Honda", "model": "Civic"}, format="json")
+        print(request.body)
 
         with patch("cars.serializers.requests.get") as mock_get:
             mock_get.return_value.ok = False
@@ -128,10 +133,10 @@ class CarCreateViewTest(APITestCase):
             response = self.view(request)
             response.render()
 
-        with self.assertRaises(DataError):
+        with self.assertRaises(Manufacturer.DoesNotExist):
             Manufacturer.objects.get(make="Honda")
 
-        with self.assertRaises(DataError):
+        with self.assertRaises(Car.DoesNotExist):
             Car.objects.get(model="Civic")
 
         self.assertEqual(response.data, {"detail": "Car not found in external API"})
