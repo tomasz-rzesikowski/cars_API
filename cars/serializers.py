@@ -46,3 +46,15 @@ class RateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rate
         fields = ("car_id", "rating")
+
+
+class PopularSerializer(serializers.ModelSerializer):
+    make = serializers.CharField(source="manufacturer", max_length=150)
+    rates_number = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Car
+        fields = ("id", "make", "model", "rates_number")
+
+    def get_rates_number(self, obj):
+        return Rate.objects.filter(car_id=obj.id).count()
