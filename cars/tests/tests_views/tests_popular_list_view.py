@@ -10,7 +10,7 @@ from cars.views import PopularListView
 factory = APIRequestFactory()
 
 
-class CarListViewTest(APITestCase):
+class PopularListViewTest(APITestCase):
     def setUp(self) -> None:
         self.view = PopularListView.as_view()
         self.request = factory.get(reverse("cars:list_popular"))
