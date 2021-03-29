@@ -1,6 +1,5 @@
 from unittest.mock import patch
 
-from django.db import DataError
 from django.urls import resolve
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail
@@ -8,7 +7,7 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIRequestFactory
 
 from cars.models import Car, Manufacturer
-from cars.serializers import CarGetSerializer
+from cars.serializers import CarPostSerializer
 from cars.views import CarListCreateView
 
 factory = APIRequestFactory()
@@ -60,10 +59,9 @@ class CarCreateViewTest(APITestCase):
 
             response = self.view(request)
             response.render()
-            print("!1")
 
         car = Car.objects.get(model="Mustang")
-        serializer = CarGetSerializer(car)
+        serializer = CarPostSerializer(car)
 
         manufacturer = Manufacturer.objects.get(make="Ford")
 
@@ -86,10 +84,9 @@ class CarCreateViewTest(APITestCase):
 
             response = self.view(request)
             response.render()
-            print("!2")
 
         car = Car.objects.get(model="Mustang")
-        serializer = CarGetSerializer(car)
+        serializer = CarPostSerializer(car)
 
         manufacturer_count = Manufacturer.objects.all().count()
 
@@ -112,7 +109,7 @@ class CarCreateViewTest(APITestCase):
             response.render()
 
         car = Car.objects.get(model="Mustang")
-        serializer = CarGetSerializer(car)
+        serializer = CarPostSerializer(car)
 
         manufacturer_count = Manufacturer.objects.all().count()
         car_count = Car.objects.all().count()
@@ -120,12 +117,11 @@ class CarCreateViewTest(APITestCase):
         self.assertEqual(manufacturer_count, 1)
         self.assertEqual(car_count, 1)
         self.assertEqual(response.data, serializer.data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_model_and_manufacturer_not_in_external_API_car_post(self):
         """ Manufacturer and model doesn't exist in external API."""
         request = factory.post(self.url, {"make": "Honda", "model": "Civic"}, format="json")
-        print(request.body)
 
         with patch("cars.serializers.requests.get") as mock_get:
             mock_get.return_value.ok = False

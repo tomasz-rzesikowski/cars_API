@@ -52,4 +52,6 @@ class PopularListViewTest(APITestCase):
 
         self.assertCountEqual(response.data[0].keys(), ["id", "make", "model", "rates_number"])
         self.assertEqual(response.data, serializer.data)
+        self.assertEqual(response.data[0]["rates_number"], 2)
+        self.assertEqual(response.data[1]["rates_number"], 1)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

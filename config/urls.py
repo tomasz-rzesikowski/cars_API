@@ -36,7 +36,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path("admin/", admin.site.urls),
     url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path("", RedirectView.as_view(pattern_name='cars:list_cars')),
+    path("", RedirectView.as_view(pattern_name='cars:cars')),
     path("", include("cars.urls"))
 ]
 

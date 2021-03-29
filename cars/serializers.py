@@ -27,25 +27,24 @@ class CarPostSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Create or get Manufacturer and Car"""
-        print("tutaj")
         manufacturer_make = validated_data["manufacturer"]
         car_model = validated_data["model"]
-        print("tutaj")
 
-        import_url = f"https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/{manufacturer_make}?format=json"
-        imported_data = requests.get(import_url)
+        imported_data = self.get_from_externaL_API(manufacturer_make)
 
         for car in imported_data.json()["Results"]:
             if car_model == car["Model_Name"]:
-                print(manufacturer_make)
-                man = Manufacturer.objects.get_or_create(make=manufacturer_make)
-                print(man)
-                print(type(man[0]))
-                instance = Car.objects.get_or_create(manufacturer=man[0], model=car_model)[0]
-                print(man[0])
+                man = Manufacturer.objects.get_or_create(make=manufacturer_make)[0]
+                instance = Car.objects.get_or_create(manufacturer=man, model=car_model)[0]
+
                 return instance
 
         raise NotFound(detail="Car not found in external API")
+
+    def get_from_externaL_API(self, manufacturer_make):
+        import_url = f"https://vpic.nhtsa.dot.gov/api/vehicles/getmodelsformake/{manufacturer_make}?format=json"
+        return requests.get(import_url)
+
 
 
 class RateSerializer(serializers.ModelSerializer):
@@ -64,3 +63,4 @@ class PopularSerializer(serializers.ModelSerializer):
 
     def get_rates_number(self, obj):
         return Rate.objects.filter(car_id=obj.id).count()
+

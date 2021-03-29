@@ -1,6 +1,6 @@
-from requests import Response
+from rest_framework.response import Response
+from rest_framework import filters
 from rest_framework.generics import ListAPIView, ListCreateAPIView
-
 
 from cars.models import Car
 from cars.serializers import CarGetSerializer, PopularSerializer, CarPostSerializer
@@ -11,17 +11,16 @@ class CarListCreateView(ListCreateAPIView):
     serializer_class = CarGetSerializer
 
     def create(self, request, *args, **kwargs):
-        print(request.data)
-        serializer = CarPostSerializer(request.data)
-        return Response(serializer.data)
-
-
-# class CarCreateView(APIView):
-#     def post(self, request, format=None):
-#
-#         return Response()
+        self.serializer_class = CarPostSerializer
+        return super().create(request)
 
 
 class PopularListView(ListAPIView):
     queryset = Car.objects.all()
     serializer_class = PopularSerializer
+
+    def list(self, request, *args, **kwargs):
+        serializer = super().list(request)
+
+        serializer_data = sorted(serializer.data, key=lambda x: x["rates_number"], reverse=True)
+        return Response(serializer_data)
