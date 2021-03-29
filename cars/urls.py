@@ -1,5 +1,4 @@
-from django.urls import path, include
-from rest_framework import routers
+from django.urls import path
 
 from cars import views
 
@@ -7,6 +6,6 @@ app_name = "cars"
 
 urlpatterns = [
     path('cars/', views.CarListCreateView.as_view(), name="cars"),
+    path('cars/<int:pk>/', views.CarDeleteView.as_view(), name="car_del"),
     path('popular/', views.PopularListView.as_view(), name="list_popular"),
 ]
-

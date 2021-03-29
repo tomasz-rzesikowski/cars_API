@@ -5,6 +5,7 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase, APIRequestFactory
 
 from cars.models import Car, Manufacturer
+from cars.views import CarDeleteView
 
 factory = APIRequestFactory()
 
@@ -12,7 +13,7 @@ factory = APIRequestFactory()
 class CarDelViewTest(APITestCase):
     def setUp(self) -> None:
         self.view = CarDeleteView.as_view()
-        self.reverse_url = reverse("cars:cars_del", kwargs={"pk": 1})
+        self.reverse_url = reverse("cars:car_del", kwargs={"pk": 1})
         self.base_url = "/cars/"
         self.request = factory.delete(self.base_url)
         self.manufacturer = Manufacturer.objects.create(make="Ford")

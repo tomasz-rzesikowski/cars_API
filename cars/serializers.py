@@ -46,7 +46,6 @@ class CarPostSerializer(serializers.ModelSerializer):
         return requests.get(import_url)
 
 
-
 class RateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rate
@@ -63,4 +62,3 @@ class PopularSerializer(serializers.ModelSerializer):
 
     def get_rates_number(self, obj):
         return Rate.objects.filter(car_id=obj.id).count()
-

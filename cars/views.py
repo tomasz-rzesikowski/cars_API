@@ -1,6 +1,5 @@
 from rest_framework.response import Response
-from rest_framework import filters
-from rest_framework.generics import ListAPIView, ListCreateAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView, DestroyAPIView
 
 from cars.models import Car
 from cars.serializers import CarGetSerializer, PopularSerializer, CarPostSerializer
@@ -13,6 +12,11 @@ class CarListCreateView(ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         self.serializer_class = CarPostSerializer
         return super().create(request)
+
+
+class CarDeleteView(DestroyAPIView):
+    serializer_class = CarGetSerializer
+    queryset = Car.objects.all()
 
 
 class PopularListView(ListAPIView):
