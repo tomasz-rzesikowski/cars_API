@@ -57,7 +57,7 @@ class ManufacturerSerializersTest(TestCase):
 
         serializer.is_valid()
         with patch("cars.serializers.requests.get") as mock_get:
-            mock_get.return_value.ok = False
+            mock_get.return_value.ok = True
             mock_get.return_value.json.return_value = self.external_API_Response
             self.assertEqual(serializer.save(), self.car)
 
@@ -69,5 +69,4 @@ class ManufacturerSerializersTest(TestCase):
 
             with patch("cars.serializers.requests.get") as mock_get:
                 mock_get.return_value.ok = False
-                mock_get.return_value.json.return_value = self.external_API_Response
                 serializer.save()

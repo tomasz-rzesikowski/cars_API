@@ -18,7 +18,7 @@ class Car(models.Model):
 
 
 class Rate(models.Model):
-    car = models.ForeignKey("Car", on_delete=models.CASCADE, null=False)
+    car = models.ForeignKey("Car", on_delete=models.CASCADE, null=False, related_name="rate")
     rating = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)], null=False)
 
     def __str__(self):
