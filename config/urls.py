@@ -25,9 +25,9 @@ from config import settings
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Books API",
+        title="Cars API",
         default_version='v1',
-        description="API to list books from database",
+        description="Simple REST application providing access to data about cars, and system for rating them.",
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
