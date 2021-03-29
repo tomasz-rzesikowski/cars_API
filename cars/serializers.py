@@ -1,5 +1,4 @@
 import requests
-from django.db.models import Avg
 from rest_framework import serializers
 from rest_framework.exceptions import NotFound
 
@@ -8,14 +7,11 @@ from cars.models import Manufacturer, Car, Rate
 
 class CarGetSerializer(serializers.ModelSerializer):
     make = serializers.CharField(source="manufacturer", max_length=150)
-    avg_rating = serializers.SerializerMethodField()
+    avg_rating = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Car
         fields = ("id", "make", "model", "avg_rating")
-
-    def get_avg_rating(self, obj):
-        return Rate.objects.filter(car_id=obj.id).aggregate(Avg("rating")).get("rating__avg")
 
 
 class CarPostSerializer(serializers.ModelSerializer):
@@ -54,11 +50,8 @@ class RateSerializer(serializers.ModelSerializer):
 
 class PopularSerializer(serializers.ModelSerializer):
     make = serializers.CharField(source="manufacturer", max_length=150)
-    rates_number = serializers.SerializerMethodField()
+    rates_number = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Car
         fields = ("id", "make", "model", "rates_number")
-
-    def get_rates_number(self, obj):
-        return Rate.objects.filter(car_id=obj.id).count()

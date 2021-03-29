@@ -14,6 +14,7 @@ class PopularListViewTest(APITestCase):
     def setUp(self) -> None:
         self.view = PopularListView.as_view()
         self.request = factory.get(reverse("cars:list_popular"))
+        self.view_object = PopularListView()
 
     def test_url_revers(self):
         url = reverse("cars:list_popular")
@@ -23,7 +24,7 @@ class PopularListViewTest(APITestCase):
         self.assertEqual(url, "/popular/")
 
     def test_empty_popular_list(self):
-        cars = Car.objects.all()
+        cars = self.view_object.get_queryset()
         serializer = PopularSerializer(cars, many=True)
 
         response = self.view(self.request)
@@ -44,7 +45,7 @@ class PopularListViewTest(APITestCase):
 
         Rate.objects.create(car=car_two, rating=4)
 
-        cars = Car.objects.all()
+        cars = self.view_object.get_queryset()
         serializer = PopularSerializer(cars, many=True)
 
         response = self.view(self.request)

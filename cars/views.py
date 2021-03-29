@@ -1,3 +1,4 @@
+from django.db.models import Avg, Count
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, ListCreateAPIView, DestroyAPIView
 
@@ -6,7 +7,7 @@ from cars.serializers import CarGetSerializer, PopularSerializer, CarPostSeriali
 
 
 class CarListCreateView(ListCreateAPIView):
-    queryset = Car.objects.all()
+    queryset = Car.objects.select_related("manufacturer").all().annotate(avg_rating=Avg("rate__rating"))
     serializer_class = CarGetSerializer
 
     def create(self, request, *args, **kwargs):
@@ -20,11 +21,6 @@ class CarDeleteView(DestroyAPIView):
 
 
 class PopularListView(ListAPIView):
-    queryset = Car.objects.all()
+    queryset = Car.objects.select_related("manufacturer").all().annotate(
+        rates_number=Count("rate__rating")).order_by("-rates_number")
     serializer_class = PopularSerializer
-
-    def list(self, request, *args, **kwargs):
-        serializer = super().list(request)
-
-        serializer_data = sorted(serializer.data, key=lambda x: x["rates_number"], reverse=True)
-        return Response(serializer_data)

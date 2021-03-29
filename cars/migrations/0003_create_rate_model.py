@@ -18,7 +18,11 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('rating', models.IntegerField(validators=[django.core.validators.MinValueValidator(1),
                                                            django.core.validators.MaxValueValidator(5)])),
-                ('car', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='cars.car')),
+                ('car', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE,
+                    related_name='rate',
+                    to='cars.car'
+                )),
             ],
         ),
     ]

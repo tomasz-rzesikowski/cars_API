@@ -12,6 +12,7 @@ factory = APIRequestFactory()
 
 class CarListViewTest(APITestCase):
     def setUp(self) -> None:
+        self.view_object = CarListCreateView()
         self.view = CarListCreateView.as_view()
         self.url = reverse("cars:cars")
         self.request = factory.get(self.url)
@@ -38,7 +39,7 @@ class CarListViewTest(APITestCase):
         Car.objects.create(manufacturer=manufacturer, model="Mustang")
         Car.objects.create(manufacturer=manufacturer, model="F-150")
 
-        cars = Car.objects.all()
+        cars = self.view_object.get_queryset()
         serializer = CarGetSerializer(cars, many=True)
 
         response = self.view(self.request)
