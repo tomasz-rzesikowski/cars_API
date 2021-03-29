@@ -7,7 +7,7 @@ from cars.models import Manufacturer, Car, Rate
 
 class CarGetSerializer(serializers.ModelSerializer):
     make = serializers.CharField(source="manufacturer", max_length=150)
-    avg_rating = serializers.IntegerField(read_only=True)
+    avg_rating = serializers.FloatField(read_only=True)
 
     class Meta:
         model = Car
@@ -43,6 +43,8 @@ class CarPostSerializer(serializers.ModelSerializer):
 
 
 class RateSerializer(serializers.ModelSerializer):
+    car_id = serializers.IntegerField(required=True)
+
     class Meta:
         model = Rate
         fields = ("car_id", "rating")

@@ -1,13 +1,14 @@
-from django.db.models import Avg, Count
-from rest_framework.response import Response
-from rest_framework.generics import ListAPIView, ListCreateAPIView, DestroyAPIView
+from django.db.models import Avg, Count, Func
+
+from rest_framework.generics import ListAPIView, ListCreateAPIView, DestroyAPIView, CreateAPIView
 
 from cars.models import Car
-from cars.serializers import CarGetSerializer, PopularSerializer, CarPostSerializer
+from cars.serializers import CarGetSerializer, PopularSerializer, CarPostSerializer, RateSerializer
 
 
 class CarListCreateView(ListCreateAPIView):
-    queryset = Car.objects.select_related("manufacturer").all().annotate(avg_rating=Avg("rate__rating"))
+    queryset = Car.objects.select_related("manufacturer").all().annotate(
+        avg_rating=Func(Avg("rate__rating"), 2, function="ROUND"))
     serializer_class = CarGetSerializer
 
     def create(self, request, *args, **kwargs):
@@ -24,3 +25,7 @@ class PopularListView(ListAPIView):
     queryset = Car.objects.select_related("manufacturer").all().annotate(
         rates_number=Count("rate__rating")).order_by("-rates_number")
     serializer_class = PopularSerializer
+
+
+class RateCreateView(CreateAPIView):
+    serializer_class = RateSerializer
