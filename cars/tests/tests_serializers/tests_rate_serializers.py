@@ -7,13 +7,13 @@ from cars.serializers import RateSerializer
 class RateSerializersTest(TestCase):
 
     def setUp(self):
-        self.serializer_data = {
-            "car_id": 1,
-            "rating": 1
-        }
-
         self.manufacturer = Manufacturer.objects.create(make="Ford")
         self.car = Car.objects.create(manufacturer=self.manufacturer, model="Mustang")
+
+        self.serializer_data = {
+            "car_id": self.car.id,
+            "rating": 1
+        }
         self.rate = Rate.objects.create(car=self.car, rating=1)
         self.serializer = RateSerializer(self.rate)
 

@@ -16,10 +16,10 @@ Simple REST application providing access to data about cars, and system for rati
 4. Enjoy!
 
 ### Endpoints
-1. [https://capirs.herokuapp.com/cars/](https://capirs.herokuapp.com/cars/) GET and POST cars.
-2. [https://capirs.herokuapp.com/cars/<pk>](https://capirs.herokuapp.com/cars/<pk>) DELETE a car.
-3. [https://capirs.herokuapp.com/popular/](https://capirs.herokuapp.com/popular/) GET information about cars popularity.
-4. [https://capirs.herokuapp.com/rate/](https://capirs.herokuapp.com/rate/) POST raring for the car.
+1. `https://capirs.herokuapp.com/cars/` GET and POST cars.
+2. https://capirs.herokuapp.com/cars/<pk> DELETE a car.
+3. https://capirs.herokuapp.com/popular/ GET information about cars popularity.
+4. https://capirs.herokuapp.com/rate/ POST raring for the car.
 
 ## API description.
 You can check documentation for API [here](https://capirs.herokuapp.com/swagger/).

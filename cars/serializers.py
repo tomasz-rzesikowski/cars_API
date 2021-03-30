@@ -43,7 +43,8 @@ class CarPostSerializer(serializers.ModelSerializer):
 
 
 class RateSerializer(serializers.ModelSerializer):
-    car_id = serializers.IntegerField(required=True)
+    # car_id = serializers.IntegerField(source="car.id", required=True)
+    car_id = serializers.PrimaryKeyRelatedField(source="car", required=True, queryset=Car.objects.all())
 
     class Meta:
         model = Rate
